@@ -1,0 +1,24 @@
+.container {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.title {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.info {
+	margin-bottom: 20px;
+}
+
+.info p {
+	margin: 5px 0;
+}
+
+.chart {
+	width: 100%;
+	height: 400px;
+}
