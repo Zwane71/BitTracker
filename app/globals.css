@@ -88,9 +88,10 @@ html,
 body {
 	max-width: 100vw;
 	overflow-x: hidden;
-}
-
-body {
+	background-image: url("../public/logo.jpg"); /* Set the background image */
+	background-size: cover; /* Ensure the image covers the entire body */
+	background-position: center; /* Center the image */
+	background-repeat: no-repeat; /* Prevent repeating the image */
 }
 
 a {

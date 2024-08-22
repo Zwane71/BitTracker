@@ -1,142 +1,80 @@
-/* Container for the table */
+/* crypto.module.css */
 .container {
-	max-width: 1000px;
-	margin: 0 auto;
-	padding: 20px;
+	background-color: #ffffff; /* Background color */
+	color: white; /* Text color */
+	padding: 2rem;
 }
-
-/* Title styling */
 .title {
-	text-align: center;
-	font-size: 2rem;
-	font-weight: bold;
-	margin-bottom: 20px;
+	color: #f1f5f9;
 }
 
-/* Table wrapper for responsive design */
-.tableWrapper {
-	overflow-x: auto;
-}
-
-/* Table base styling */
 .table {
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 1rem;
+	overflow-x: auto; /* Enable horizontal scrolling for small screens */
+	opacity: 0.5; /* Set opacity to 50% */
 }
 
-/* Header styling */
 .tableHead {
-	background-color: #f5f5f5;
+	background-color: #f1f5f9; /* Header background color */
+	color: #000000;
 }
 
-/* Cells styling */
+.tableRow {
+	background-color: #f9fafb; /* Row background color */
+	color: #000000;
+}
+
 .tableCell {
-	padding: 10px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
+	padding: 1rem;
+	border-bottom: 1px solid #e2e8f0;
 }
 
-/* Row hover effect */
-.tableRow:hover {
-	background-color: #f9f9f9;
-}
-
-/* Icons styling */
-.tableCellIcon {
-	width: 32px;
-	height: 32px;
-	display: block;
-	margin: 0 auto;
-}
-
-/* Green text for positive values */
 .greenText {
-	color: #10b981;
+	color: #10b981; /* Profit text color */
 }
 
-/* Red text for negative values */
 .redText {
-	color: #ef4444;
+	color: #ef4444; /* Loss text color */
 }
 
-/* Responsive design for smaller screens */
+.dropdown {
+	background-color: #ffffff; /* Dropdown background color */
+}
 
-/* Small tablets and large phones (landscape mode, screen width < 768px) */
+/* Responsive Styles */
+@media (min-width: 1024px) {
+	.tableCellIcon {
+		width: 1.5rem; /* Reduce icon size on larger screens */
+		height: 1.5rem;
+	}
+}
+
+@media (max-width: 1024px) {
+	.tableCell {
+		font-size: 0.875rem; /* Slightly smaller font size for medium screens */
+		padding: 0.75rem; /* Adjust padding for medium screens */
+	}
+}
+
 @media (max-width: 768px) {
 	.tableCell {
-		padding: 8px;
-		font-size: 0.9rem;
-	}
-
-	.table {
-		font-size: 0.9rem;
-	}
-
-	.tableCellIcon {
-		width: 28px;
-		height: 28px;
+		font-size: 0.75rem; /* Smaller font size for small screens */
+		padding: 0.5rem; /* Adjust padding for small screens */
 	}
 }
 
-/* For small phones and very small devices (screen width < 640px) */
-@media (max-width: 640px) {
-	.tableCell {
-		padding: 6px;
-		font-size: 0.85rem;
+@media (max-width: 480px) {
+	.table {
+		font-size: 0.7rem; /* Smaller font size for very small screens */
 	}
 
-	.table {
-		font-size: 0.85rem;
+	.tableCell {
+		padding: 0.25rem; /* Adjust padding for very small screens */
 	}
 
 	.tableCellIcon {
-		width: 24px;
-		height: 24px;
-	}
-
-	/* Stack table content vertically */
-	.table,
-	.table thead,
-	.table tbody,
-	.table th,
-	.table td,
-	.table tr {
-		display: block;
-		width: 100%;
-	}
-
-	/* Hide table headers (not useful in mobile view) */
-	.tableHead {
-		display: none;
-	}
-
-	/* Each row becomes a card */
-	.tableRow {
-		margin-bottom: 15px;
-		background-color: #f9f9f9;
-		padding: 10px;
-		border: 1px solid #ddd;
-		border-radius: 5px;
-	}
-
-	/* Make each cell appear as a line in a card */
-	.tableCell {
-		text-align: right;
-		padding-left: 50%;
-		position: relative;
-		border: none;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	/* Add a label for each cell when stacked */
-	.tableCell::before {
-		content: attr(data-label);
-		position: absolute;
-		left: 10px;
-		font-weight: bold;
-		text-transform: uppercase;
+		width: 1.25rem; /* Smaller icons for very small screens */
+		height: 1.25rem;
 	}
 }

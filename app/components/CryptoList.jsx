@@ -1,22 +1,22 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import styles from "@/app/components/crypto.module.css";
-import SearchBar from "@/app/components/SearchBar/SearchBar";
-import CoinDetails from "@/app/components/CoinDetails/CoinDetails";
+import React, { useState, useEffect } from "react";
+import styles from "./crypto.module.css"; // Still use CSS modules for other styles
+import SearchBar from "./SearchBar/SearchBar";
+import CoinDetails from "./CoinDetails/CoinDetails";
 
 const CryptoTable = () => {
 	const [cryptos, setCryptos] = useState([]);
 	const [filteredCryptos, setFilteredCryptos] = useState([]);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [selectedCoinId, setSelectedCoinId] = useState(null);
 	const [error, setError] = useState(null);
-	const router = useRouter();
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchCryptos = async () => {
+			setLoading(true);
 			try {
-				const response = await fetch(
-					"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
-				);
+				const response = await fetch("/api/coins/markets?vs_currency=usd");
 				if (!response.ok) {
 					throw new Error("Network response was not ok");
 				}
@@ -25,6 +25,8 @@ const CryptoTable = () => {
 				setFilteredCryptos(data.slice(0, 15));
 			} catch (err) {
 				setError(err.message);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -33,7 +35,6 @@ const CryptoTable = () => {
 
 	const handleSearch = (query) => {
 		setSearchQuery(query);
-
 		if (query === "") {
 			setFilteredCryptos(cryptos);
 		} else {
@@ -48,13 +49,19 @@ const CryptoTable = () => {
 	};
 
 	const handleRowClick = (coinId) => {
-		router.push(`/coins/${coinId}`);
+		setSelectedCoinId(selectedCoinId === coinId ? null : coinId); // Toggle dropdown
 	};
 
+	if (loading) return <div>Loading...</div>;
 	if (error) return <div>Error: {error}</div>;
 
 	return (
-		<div className={styles.container}>
+		<div
+			style={{
+				backgroundColor: "var(--bg-color-light)", // Uses global CSS variables
+				color: "var(--text-color-light)", // These variables will change based on the theme
+			}}
+			className={styles.container}>
 			<h1 className={styles.title}>Cryptocurrency Prices</h1>
 			<SearchBar searchQuery={searchQuery} onSearch={handleSearch} />
 			<div className={styles.tableWrapper}>
@@ -71,41 +78,51 @@ const CryptoTable = () => {
 					</thead>
 					<tbody>
 						{filteredCryptos.map((crypto) => (
-							<tr
-								key={crypto.id}
-								className={styles.tableRow}
-								onClick={() => handleRowClick(crypto.id)}>
-								<td className={styles.tableCell} data-label='Icon'>
-									<img
-										src={crypto.image}
-										alt={crypto.name}
-										className={styles.tableCellIcon}
-									/>
-								</td>
-								<td className={styles.tableCell} data-label='Name'>
-									{crypto.name}
-								</td>
-								<td
-									className={`${styles.tableCell} uppercase`}
-									data-label='Symbol'>
-									{crypto.symbol}
-								</td>
-								<td className={styles.tableCell} data-label='Price (USD)'>
-									${crypto.current_price.toFixed(2)}
-								</td>
-								<td
-									className={`${styles.tableCell} ${
-										crypto.price_change_percentage_24h >= 0
-											? styles.greenText
-											: styles.redText
+							<React.Fragment key={crypto.id}>
+								<tr
+									className={`${styles.tableRow} ${
+										selectedCoinId === crypto.id ? styles.activeRow : ""
 									}`}
-									data-label='24h Change'>
-									{crypto.price_change_percentage_24h.toFixed(2)}%
-								</td>
-								<td className={styles.tableCell} data-label='Status'>
-									{crypto.price_change_percentage_24h >= 0 ? "Profit" : "Loss"}
-								</td>
-							</tr>
+									onClick={() => handleRowClick(crypto.id)}>
+									<td className={styles.tableCell} data-label='Icon'>
+										<img
+											src={crypto.image}
+											alt={crypto.name}
+											className={styles.tableCellIcon}
+										/>
+									</td>
+									<td className={styles.tableCell} data-label='Name'>
+										{crypto.name}
+									</td>
+									<td className={styles.tableCell} data-label='Symbol'>
+										{crypto.symbol}
+									</td>
+									<td className={styles.tableCell} data-label='Price (USD)'>
+										${crypto.current_price.toFixed(2)}
+									</td>
+									<td
+										className={`${styles.tableCell} ${
+											crypto.price_change_percentage_24h >= 0
+												? styles.greenText
+												: styles.redText
+										}`}
+										data-label='24h Change'>
+										{crypto.price_change_percentage_24h.toFixed(2)}%
+									</td>
+									<td className={styles.tableCell} data-label='Status'>
+										{crypto.price_change_percentage_24h >= 0
+											? "Profit"
+											: "Loss"}
+									</td>
+								</tr>
+								{selectedCoinId === crypto.id && (
+									<tr>
+										<td colSpan='6' className={styles.dropdown}>
+											<CoinDetails coinId={crypto.id} />
+										</td>
+									</tr>
+								)}
+							</React.Fragment>
 						))}
 					</tbody>
 				</table>
